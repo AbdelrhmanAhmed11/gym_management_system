@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="en">
+<context>
+    <name>LoginWindow</name>
+    <message>
+        <source>Gym Management Login</source>
+        <translation>Gym Management Login</translation>
+    </message>
+    <message>
+        <source>Username:</source>
+        <translation>Username:</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation>Password:</translation>
+    </message>
+    <message>
+        <source>Role:</source>
+        <translation>Role:</translation>
+    </message>
+    <message>
+        <source>Admin</source>
+        <translation>Admin</translation>
+    </message>
+    <message>
+        <source>Receptionist</source>
+        <translation>Receptionist</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Login</translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation>Language:</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <source>Please enter username and password.</source>
+        <translation>Please enter username and password.</translation>
+    </message>
+    <message>
+        <source>Login successful!</source>
+        <translation>Login successful!</translation>
+    </message>
+    <message>
+        <source>Invalid credentials or role.</source>
+        <translation>Invalid credentials or role.</translation>
+    </message>
+</context>
+<context>
+    <name>DashboardWindow</name>
+    <message>
+        <source>Active:</source>
+        <translation>Active:</translation>
+    </message>
+    <message>
+        <source>Frozen:</source>
+        <translation>Frozen:</translation>
+    </message>
+    <message>
+        <source>Ending Soon:</source>
+        <translation>Ending Soon:</translation>
+    </message>
+    <message>
+        <source>Revenue:</source>
+        <translation>Revenue:</translation>
+    </message>
+    <message>
+        <source>Invite Conversion:</source>
+        <translation>Invite Conversion:</translation>
+    </message>
+    <message>
+        <source>Missing Payments:</source>
+        <translation>Missing Payments:</translation>
+    </message>
+    <message>
+        <source>Daily Cashier:</source>
+        <translation>Daily Cashier:</translation>
+    </message>
+    <message>
+        <source>Back to Dashboard</source>
+        <translation>Back to Dashboard</translation>
+    </message>
+</context>
+<context>
+    <name>ClientsView</name>
+    <message>
+        <source>Clients</source>
+        <translation>Clients</translation>
+    </message>
+    <message>
+        <source>Search by name, code, or phone</source>
+        <translation>Search by name, code, or phone</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>Search</translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation>Search:</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation>Code</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>Phone</source>
+        <translation>Phone</translation>
+    </message>
+    <message>
+        <source>Subscription</source>
+        <translation>Subscription</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Start</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation>End</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>Add</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>Success</translation>
+    </message>
+    <message>
+        <source>Client added successfully.</source>
+        <translation>Client added successfully.</translation>
+    </message>
+    <message>
+        <source>Client updated successfully.</source>
+        <translation>Client updated successfully.</translation>
+    </message>
+    <message>
+        <source>Client deleted successfully.</source>
+        <translation>Client deleted successfully.</translation>
+    </message>
+    <message>
+        <source>Confirm Delete</source>
+        <translation>Confirm Delete</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this client?</source>
+        <translation>Are you sure you want to delete this client?</translation>
+    </message>
+</context>
+<context>
+    <name>ClientProfileDialog</name>
+    <message>
+        <source>Client Profile</source>
+        <translation>Client Profile</translation>
+    </message>
+    <message>
+        <source>Profile Picture:</source>
+        <translation>Profile Picture:</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Browse</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>Name:</translation>
+    </message>
+    <message>
+        <source>Phone:</source>
+        <translation>Phone:</translation>
+    </message>
+    <message>
+        <source>Client Code:</source>
+        <translation>Client Code:</translation>
+    </message>
+    <message>
+        <source>Subscription Type:</source>
+        <translation>Subscription Type:</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>Normal</translation>
+    </message>
+    <message>
+        <source>Private</source>
+        <translation>Private</translation>
+    </message>
+    <message>
+        <source>Under 15</source>
+        <translation>Under 15</translation>
+    </message>
+    <message>
+        <source>Box</source>
+        <translation>Box</translation>
+    </message>
+    <message>
+        <source>Duration (months):</source>
+        <translation>Duration (months):</translation>
+    </message>
+    <message>
+        <source>Start Date:</source>
+        <translation>Start Date:</translation>
+    </message>
+    <message>
+        <source>End Date:</source>
+        <translation>End Date:</translation>
+    </message>
+    <message>
+        <source>Amount Paid:</source>
+        <translation>Amount Paid:</translation>
+    </message>
+    <message>
+        <source>Amount Remaining:</source>
+        <translation>Amount Remaining:</translation>
+    </message>
+    <message>
+        <source>Rotation:</source>
+        <translation>Rotation:</translation>
+    </message>
+    <message>
+        <source>Freeze Days:</source>
+        <translation>Freeze Days:</translation>
+    </message>
+    <message>
+        <source>Guardian Name:</source>
+        <translation>Guardian Name:</translation>
+    </message>
+    <message>
+        <source>Guardian Phone:</source>
+        <translation>Guardian Phone:</translation>
+    </message>
+    <message>
+        <source>Trainer Name:</source>
+        <translation>Trainer Name:</translation>
+    </message>
+    <message>
+        <source>Attendance Schedule:</source>
+        <translation>Attendance Schedule:</translation>
+    </message>
+    <message>
+        <source>Invites (name/phone, one per line):</source>
+        <translation>Invites (name/phone, one per line):</translation>
+    </message>
+</context>
+</TS> 

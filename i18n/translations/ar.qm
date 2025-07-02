@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="ar">
+<context>
+    <name>LoginWindow</name>
+    <message>
+        <source>Gym Management Login</source>
+        <translation>تسجيل دخول إدارة الجيم</translation>
+    </message>
+    <message>
+        <source>Username:</source>
+        <translation>اسم المستخدم:</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation>كلمة المرور:</translation>
+    </message>
+    <message>
+        <source>Role:</source>
+        <translation>الدور:</translation>
+    </message>
+    <message>
+        <source>Admin</source>
+        <translation>المدير</translation>
+    </message>
+    <message>
+        <source>Receptionist</source>
+        <translation>الاستقبال</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>تسجيل الدخول</translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation>اللغة:</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>خطأ</translation>
+    </message>
+    <message>
+        <source>Please enter username and password.</source>
+        <translation>يرجى إدخال اسم المستخدم وكلمة المرور.</translation>
+    </message>
+    <message>
+        <source>Login successful!</source>
+        <translation>تم تسجيل الدخول بنجاح!</translation>
+    </message>
+    <message>
+        <source>Invalid credentials or role.</source>
+        <translation>بيانات الاعتماد أو الدور غير صحيحة.</translation>
+    </message>
+</context>
+<context>
+    <name>DashboardWindow</name>
+    <message>
+        <source>Active:</source>
+        <translation>نشط:</translation>
+    </message>
+    <message>
+        <source>Frozen:</source>
+        <translation>مجمد:</translation>
+    </message>
+    <message>
+        <source>Ending Soon:</source>
+        <translation>ينتهي قريباً:</translation>
+    </message>
+    <message>
+        <source>Revenue:</source>
+        <translation>الإيرادات:</translation>
+    </message>
+    <message>
+        <source>Invite Conversion:</source>
+        <translation>تحويل الدعوات:</translation>
+    </message>
+    <message>
+        <source>Missing Payments:</source>
+        <translation>المدفوعات المفقودة:</translation>
+    </message>
+    <message>
+        <source>Daily Cashier:</source>
+        <translation>الصندوق اليومي:</translation>
+    </message>
+    <message>
+        <source>Back to Dashboard</source>
+        <translation>العودة للوحة التحكم</translation>
+    </message>
+</context>
+<context>
+    <name>ClientsView</name>
+    <message>
+        <source>Clients</source>
+        <translation>العملاء</translation>
+    </message>
+    <message>
+        <source>Search by name, code, or phone</source>
+        <translation>البحث بالاسم أو الكود أو الهاتف</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>بحث</translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation>بحث:</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation>الكود</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>الاسم</translation>
+    </message>
+    <message>
+        <source>Phone</source>
+        <translation>الهاتف</translation>
+    </message>
+    <message>
+        <source>Subscription</source>
+        <translation>الاشتراك</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>البداية</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation>النهاية</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>إضافة</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>نجاح</translation>
+    </message>
+    <message>
+        <source>Client added successfully.</source>
+        <translation>تمت إضافة العميل بنجاح.</translation>
+    </message>
+    <message>
+        <source>Client updated successfully.</source>
+        <translation>تم تحديث بيانات العميل بنجاح.</translation>
+    </message>
+    <message>
+        <source>Client deleted successfully.</source>
+        <translation>تم حذف العميل بنجاح.</translation>
+    </message>
+    <message>
+        <source>Confirm Delete</source>
+        <translation>تأكيد الحذف</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this client?</source>
+        <translation>هل أنت متأكد أنك تريد حذف هذا العميل؟</translation>
+    </message>
+</context>
+<context>
+    <name>ClientProfileDialog</name>
+    <message>
+        <source>Client Profile</source>
+        <translation>ملف العميل</translation>
+    </message>
+    <message>
+        <source>Profile Picture:</source>
+        <translation>صورة الملف:</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>تصفح</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>الاسم:</translation>
+    </message>
+    <message>
+        <source>Phone:</source>
+        <translation>الهاتف:</translation>
+    </message>
+    <message>
+        <source>Client Code:</source>
+        <translation>كود العميل:</translation>
+    </message>
+    <message>
+        <source>Subscription Type:</source>
+        <translation>نوع الاشتراك:</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>عادي</translation>
+    </message>
+    <message>
+        <source>Private</source>
+        <translation>خاص</translation>
+    </message>
+    <message>
+        <source>Under 15</source>
+        <translation>أقل من 15</translation>
+    </message>
+    <message>
+        <source>Box</source>
+        <translation>بوكس</translation>
+    </message>
+    <message>
+        <source>Duration (months):</source>
+        <translation>المدة (بالشهور):</translation>
+    </message>
+    <message>
+        <source>Start Date:</source>
+        <translation>تاريخ البداية:</translation>
+    </message>
+    <message>
+        <source>End Date:</source>
+        <translation>تاريخ النهاية:</translation>
+    </message>
+    <message>
+        <source>Amount Paid:</source>
+        <translation>المبلغ المدفوع:</translation>
+    </message>
+    <message>
+        <source>Amount Remaining:</source>
+        <translation>المبلغ المتبقي:</translation>
+    </message>
+    <message>
+        <source>Rotation:</source>
+        <translation>الدوران:</translation>
+    </message>
+    <message>
+        <source>Freeze Days:</source>
+        <translation>أيام التجميد:</translation>
+    </message>
+    <message>
+        <source>Guardian Name:</source>
+        <translation>اسم ولي الأمر:</translation>
+    </message>
+    <message>
+        <source>Guardian Phone:</source>
+        <translation>هاتف ولي الأمر:</translation>
+    </message>
+    <message>
+        <source>Trainer Name:</source>
+        <translation>اسم المدرب:</translation>
+    </message>
+    <message>
+        <source>Attendance Schedule:</source>
+        <translation>جدول الحضور:</translation>
+    </message>
+    <message>
+        <source>Invites (name/phone, one per line):</source>
+        <translation>الدعوات (اسم/هاتف، كل سطر دعوة):</translation>
+    </message>
+</context>
+<!-- Add similar <context> blocks for AttendanceView, FinanceView, SessionsView, InvitationsView, LoansView, ReportsView, UserManagementView, etc., with all their tr() keys translated to Arabic. -->
+</TS> 
