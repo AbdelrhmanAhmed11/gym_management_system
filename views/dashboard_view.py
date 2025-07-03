@@ -724,15 +724,42 @@ class DashboardWindow(QWidget):
         return text
 
     def retranslate_ui(self):
-        # Example: update window title and any labels/buttons
-        self.setWindowTitle(self.tr('Dashboard'))
-        # Set layout direction based on language
+        self.setWindowTitle(self.tr('Gym Management Dashboard'))
         if self.translator.get_language() == 'ar':
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        # Update all labels, buttons, etc. here using self.tr(...)
-        # (You should add similar updates for all UI elements in this view)
+        # Update sidebar header
+        sidebar_header = self.sidebar.findChild(QFrame, 'sidebarHeader')
+        if sidebar_header:
+            for widget in sidebar_header.findChildren(QLabel):
+                if widget.objectName() == 'sidebarTitle':
+                    widget.setText(self.tr('GYM\nMANAGEMENT'))
+                elif widget.objectName() == 'sidebarUserInfo':
+                    widget.setText(self.tr(f'{self.user[1]}\n{self.user[2].upper()}'))
+        # Update sidebar navigation
+        nav_frame = self.sidebar.findChild(QFrame, 'sidebarNav')
+        if nav_frame:
+            nav_title = nav_frame.findChild(QLabel, 'sidebarNavTitle')
+            if nav_title:
+                nav_title.setText(self.tr('QUICK ACTIONS'))
+            for btn in nav_frame.findChildren(QPushButton, 'sidebarButton'):
+                text = btn.text()
+                # Only update the text part, keep the icon
+                if '  ' in text:
+                    icon, label = text.split('  ', 1)
+                    btn.setText(f"{icon}  {self.tr(label)}")
+        # Rebuild main content area to update all dynamic content
+        self.reload_data()
+
+    def reload_data(self):
+        # Remove and recreate the main content area to refresh all translated/dynamic content
+        main_layout = self.layout()
+        if self.main_content:
+            main_layout.removeWidget(self.main_content)
+            self.main_content.deleteLater()
+        self.main_content = self.create_main_content()
+        main_layout.addWidget(self.main_content)
 
 # Example usage and testing
 if __name__ == '__main__':

@@ -1058,13 +1058,64 @@ class SessionsView(QWidget):
         return self.translator.translate(text)
 
     def retranslate_ui(self):
-        print('DEBUG: retranslate_ui called for SessionsView')
-        print('DEBUG: add_btn text before:', self.add_btn.text())
         if self.translator.get_language() == 'ar':
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        self.add_btn.setText(self.tr('➕ Add New Session'))
-        print('DEBUG: add_btn text after:', self.add_btn.text())
-        self.edit_btn.setText(self.tr('✏️ Edit Session'))
-        self.delete_btn.setText(self.tr('🗑️ Delete Session'))
+        # Update header
+        if hasattr(self, 'header_frame'):
+            title_label = self.header_frame.findChild(QLabel, 'pageTitle')
+            if title_label:
+                title_label.setText(self.tr('🏋️ Sessions Management'))
+            subtitle_label = self.header_frame.findChild(QLabel, 'pageSubtitle')
+            if subtitle_label:
+                subtitle_label.setText(self.tr('Track training sessions, manage schedules, and monitor workout activities'))
+        # Update search section
+        if hasattr(self, 'trainer_input'):
+            self.trainer_input.setPlaceholderText(self.tr('Search by trainer name...'))
+        if hasattr(self, 'client_input'):
+            self.client_input.setPlaceholderText(self.tr('Search by client code/name...'))
+        if hasattr(self, 'type_combo'):
+            self.type_combo.clear()
+            self.type_combo.addItems([
+                self.tr('All Types'),
+                self.tr('Private'),
+                self.tr('Group')
+            ])
+        if hasattr(self, 'filter_btn'):
+            self.filter_btn.setText(self.tr('🔍 Filter'))
+        if hasattr(self, 'clear_btn'):
+            self.clear_btn.setText(self.tr('✖ Clear'))
+        # Update stats section
+        if hasattr(self, 'stats_frame'):
+            for card in self.stats_frame.findChildren(QFrame, 'statCard'):
+                for label_widget in card.findChildren(QLabel, 'statValue'):
+                    text = label_widget.text()
+                    import re
+                    match = re.match(r'(.+) \((\d+)\)', text)
+                    if match:
+                        label, value = match.groups()
+                        label_widget.setText(f"{self.tr(label)} ({value})")
+        # Update table headers
+        if hasattr(self, 'table'):
+            self.table.setHorizontalHeaderLabels([
+                self.tr('Client Code'),
+                self.tr('Client Name'),
+                self.tr('Trainer'),
+                self.tr('Date'),
+                self.tr('Type'),
+                self.tr('Group Session')
+            ])
+            self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        # Update action buttons
+        if hasattr(self, 'add_btn'):
+            self.add_btn.setText(self.tr('➕ Add New Session'))
+        if hasattr(self, 'edit_btn'):
+            self.edit_btn.setText(self.tr('✏️ Edit Session'))
+        if hasattr(self, 'delete_btn'):
+            self.delete_btn.setText(self.tr('🗑️ Delete Session'))
+        # Reload dynamic data
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_sessions()

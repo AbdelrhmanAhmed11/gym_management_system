@@ -22,6 +22,52 @@ class MainWindow(QMainWindow):
         self.language_selector.addItems(['English', 'Arabic'])
         self.language_selector.setCurrentIndex(0)
         self.language_selector.currentIndexChanged.connect(self.change_language)
+        # Style the language selector to match the login page
+        self.language_selector.setFixedHeight(40)
+        self.language_selector.setStyleSheet('''
+            QComboBox {
+                background-color: #3a3a3a;
+                border: 2px solid #4a4a4a;
+                border-radius: 15px;
+                padding: 0px 20px;
+                font-size: 16px;
+                color: #ffffff;
+                font-family: 'Segoe UI', Arial, sans-serif;
+                min-width: 120px;
+            }
+            QComboBox:focus {
+                border-color: #e63946;
+                background-color: #424242;
+                box-shadow: 0 0 12px rgba(230, 57, 70, 0.2);
+            }
+            QComboBox:hover {
+                border-color: #ff6b6b;
+                background-color: #424242;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 40px;
+                background: transparent;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 8px solid #cccccc;
+                margin-right: 15px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #3a3a3a;
+                border: 2px solid #e63946;
+                border-radius: 12px;
+                selection-background-color: #e63946;
+                selection-color: white;
+                color: #ffffff;
+                font-size: 16px;
+                padding: 10px;
+                outline: none;
+            }
+        ''')
         # Place the selector in a QWidget and set as menu bar
         top_bar = QWidget()
         top_layout = QHBoxLayout()

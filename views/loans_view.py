@@ -1030,7 +1030,6 @@ class LoansView(QWidget):
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        # Update all labels, buttons, etc. here using self.tr(...)
         # Header
         for widget in self.findChildren(QLabel, 'pageTitle'):
             widget.setText(self.tr('💰 Loans Management'))
@@ -1039,7 +1038,6 @@ class LoansView(QWidget):
         # Search section
         self.client_input.setPlaceholderText(self.tr('Search by client code/name...'))
         self.amount_input.setPlaceholderText(self.tr('Search by amount...'))
-        # Amount combo
         self.amount_combo.clear()
         self.amount_combo.addItems([
             self.tr('All Amounts'),
@@ -1047,10 +1045,8 @@ class LoansView(QWidget):
             self.tr('100 - 500'),
             self.tr('> 500')
         ])
-        # Filter and clear buttons
         self.filter_btn.setText(self.tr('🔍 Filter'))
         self.clear_btn.setText(self.tr('✖ Clear'))
-        # Amount label
         for widget in self.findChildren(QLabel):
             if widget.text().replace(':','').strip() in ['Amount', 'المبلغ']:
                 widget.setText(self.tr('Amount:'))
@@ -1076,18 +1072,16 @@ class LoansView(QWidget):
         ])
         # Balance label
         balance_text = self.balance_label.text()
-        if 'Running Balance' in balance_text or 'الرصيد الجاري' in balance_text:
-            # Try to preserve the number
-            import re
-            match = re.search(r'([\d\.,]+)', balance_text)
-            if match:
-                value = match.group(1)
-                if value == '0.00':
-                    self.balance_label.setText(self.tr('Running Balance: $0.00'))
-                else:
-                    self.balance_label.setText(self.tr(f'Running Balance: ${value}'))
-            else:
+        import re
+        match = re.search(r'([\d\.,]+)', balance_text)
+        if match:
+            value = match.group(1)
+            if value == '0.00':
                 self.balance_label.setText(self.tr('Running Balance: $0.00'))
+            else:
+                self.balance_label.setText(self.tr(f'Running Balance: ${value}'))
+        else:
+            self.balance_label.setText(self.tr('Running Balance: $0.00'))
         # Actions section
         for widget in self.findChildren(QLabel, 'actionsTitle'):
             widget.setText(self.tr('⚡ Quick Actions'))
@@ -1095,3 +1089,10 @@ class LoansView(QWidget):
         self.payment_btn.setText(self.tr('💳 Record Payment'))
         self.delete_btn.setText(self.tr('🗑️ Delete Loan'))
         self.export_btn.setText(self.tr('📊 Export Data'))
+        # Reload loans to refresh display
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_loans()
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)

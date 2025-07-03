@@ -1005,7 +1005,6 @@ class FinanceView(QWidget):
                 subtitle_label.setText(self.tr('Track payments, expenses, and financial performance'))
         # Update stats section
         if hasattr(self, 'payments_stats_label'):
-            # Try to preserve the amount
             amount = ''
             if ':' in self.payments_stats_label.text():
                 amount = self.payments_stats_label.text().split(':', 1)[-1]
@@ -1021,9 +1020,30 @@ class FinanceView(QWidget):
         for widget in self.findChildren(QLabel, 'actionsTitle'):
             if 'Payment Actions' in widget.text() or 'إجراءات المدفوعات' in widget.text():
                 widget.setText(self.tr('💳 Payment Actions'))
-
+        # Update table headers and scrollbars
+        if hasattr(self, 'payments_table'):
+            self.payments_table.setHorizontalHeaderLabels([
+                self.tr('Client Code'),
+                self.tr('Client Name'),
+                self.tr('Amount'),
+                self.tr('Description')
+            ])
+            self.payments_table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        if hasattr(self, 'expenses_table'):
+            self.expenses_table.setHorizontalHeaderLabels([
+                self.tr('Category'),
+                self.tr('Amount'),
+                self.tr('Description'),
+                self.tr('Date')
+            ])
+            self.expenses_table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         if self.translator.get_language() == 'ar':
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        # Update all labels, buttons, etc. here using self.tr(...)
+        # Reload dynamic data
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_payments()
+        self.load_expenses()

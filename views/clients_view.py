@@ -977,9 +977,14 @@ class ClientsView(QWidget):
         # Update stats section
         if hasattr(self, 'stats_frame'):
             for card in self.stats_frame.findChildren(QFrame, 'statCard'):
-                label_widget = card.findChild(QLabel, 'statLabel')
-                if label_widget:
-                    label_widget.setText(self.tr(label_widget.text()))
+                for label_widget in card.findChildren(QLabel, 'statValue'):
+                    # Rebuild stat card text
+                    text = label_widget.text()
+                    import re
+                    match = re.match(r'(.+) \((\d+)\)', text)
+                    if match:
+                        label, value = match.groups()
+                        label_widget.setText(f"{self.tr(label)} ({value})")
         # Update table headers
         if hasattr(self, 'table'):
             self.table.setHorizontalHeaderLabels([
@@ -991,12 +996,20 @@ class ClientsView(QWidget):
                 self.tr('End Date'),
                 self.tr('Status')
             ])
+            self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         # Update action buttons
         if hasattr(self, 'add_btn'):
-            self.add_btn.setText(self.tr('Add New Client'))
+            self.add_btn.setText(self.tr('➕ Add New Client'))
         if hasattr(self, 'edit_btn'):
-            self.edit_btn.setText(self.tr('Edit Client'))
+            self.edit_btn.setText(self.tr('✏️ Edit Client'))
         if hasattr(self, 'delete_btn'):
-            self.delete_btn.setText(self.tr('Delete Client'))
+            self.delete_btn.setText(self.tr('🗑️ Delete Client'))
         if hasattr(self, 'export_btn'):
-            self.export_btn.setText(self.tr('Export Data'))
+            self.export_btn.setText(self.tr('📊 Export Data'))
+        # Reload dynamic data
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_clients()
+        # Optionally reload stats if needed
+        # self.get_client_stats()

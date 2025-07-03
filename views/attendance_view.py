@@ -530,15 +530,43 @@ class AttendanceView(QWidget):
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        # Update all labels, buttons, etc. here using self.tr(...)
-        # Update stats label with current value and translation
-        import re
-        stats_text = self.stats_label.text()
-        match = re.search(r'(.*?:)\s*(\d+)$', stats_text)
-        if match:
-            label_part = match.group(1)
-            number_part = match.group(2)
-            translated_label = self.tr(label_part)
-            self.stats_label.setText(f'{translated_label} {number_part}')
-        else:
-            self.stats_label.setText(self.tr(stats_text))
+        # Update header
+        if hasattr(self, 'header_frame'):
+            title_label = self.header_frame.findChild(QLabel, 'pageTitle')
+            if title_label:
+                title_label.setText(self.tr('📋 Attendance Management'))
+            subtitle_label = self.header_frame.findChild(QLabel, 'pageSubtitle')
+            if subtitle_label:
+                subtitle_label.setText(self.tr('Track member check-ins and monitor gym attendance'))
+        # Update controls
+        if hasattr(self, 'search_btn'):
+            self.search_btn.setText(self.tr('🔍 View Attendance'))
+        if hasattr(self, 'stats_label'):
+            import re
+            stats_text = self.stats_label.text()
+            match = re.search(r'(.*?:)\s*(\d+)$', stats_text)
+            if match:
+                label_part = match.group(1)
+                number_part = match.group(2)
+                translated_label = self.tr(label_part)
+                self.stats_label.setText(f'{translated_label} {number_part}')
+            else:
+                self.stats_label.setText(self.tr(stats_text))
+        # Update table headers
+        if hasattr(self, 'table'):
+            self.table.setHorizontalHeaderLabels([
+                self.tr('Client Code'),
+                self.tr('Member Name'),
+                self.tr('Check-in Time')
+            ])
+            self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        # Update check-in section
+        if hasattr(self, 'checkin_btn'):
+            self.checkin_btn.setText(self.tr('🔥 Log Check-in'))
+        if hasattr(self, 'client_input'):
+            self.client_input.setPlaceholderText(self.tr('Enter client code or name...'))
+        # Reload dynamic data
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_attendance()

@@ -887,13 +887,11 @@ class UserManagementView(QWidget):
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        
         # Header
         for widget in self.findChildren(QLabel, 'pageTitle'):
             widget.setText(self.tr('👥 User Management'))
         for widget in self.findChildren(QLabel, 'pageSubtitle'):
             widget.setText(self.tr('Manage system users, roles, and access permissions'))
-        
         # Search section
         self.search_input.setPlaceholderText(self.tr('Search by username or full name...'))
         self.role_filter.setItemText(0, self.tr('All Roles'))
@@ -901,7 +899,6 @@ class UserManagementView(QWidget):
         self.role_filter.setItemText(2, self.tr('Receptionist'))
         self.search_btn.setText(self.tr('🔍 Search'))
         self.clear_btn.setText(self.tr('✖ Clear'))
-        
         # Table section
         for widget in self.findChildren(QLabel, 'sectionTitle'):
             widget.setText(self.tr('👥 User Directory'))
@@ -911,7 +908,6 @@ class UserManagementView(QWidget):
             self.tr('Role'),
             self.tr('Full Name')
         ])
-        
         # Actions section
         for widget in self.findChildren(QLabel, 'actionsTitle'):
             widget.setText(self.tr('⚡ User Actions'))
@@ -919,6 +915,23 @@ class UserManagementView(QWidget):
         self.remove_btn.setText(self.tr('🗑️ Remove User'))
         self.change_pass_btn.setText(self.tr('🔑 Change Password'))
         self.refresh_btn.setText(self.tr('🔄 Refresh'))
-        
+        # Stats section
+        stats = self.get_user_stats()
+        stat_labels = [self.tr('Total Users'), self.tr('Administrators'), self.tr('Receptionists'), self.tr('Active Sessions')]
+        stat_icons = ['👥', '🛡️', '👋', '🔐']
+        stat_colors = ['#e63946', '#dc3545', '#38b000', '#17a2b8']
+        stat_values = [str(stats['total']), str(stats['admins']), str(stats['receptionists']), str(stats['active'])]
+        stat_cards = self.findChildren(QFrame, 'statCard')
+        for i, card in enumerate(stat_cards):
+            labels = card.findChildren(QLabel)
+            if len(labels) == 2:
+                labels[0].setText(stat_icons[i])
+                labels[1].setText(f"{stat_labels[i]} ({stat_values[i]})")
         # Reload users to refresh display
+        self.reload_data()
+
+    def reload_data(self):
         self.load_users()
+        # Ensure table is scrollable
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)

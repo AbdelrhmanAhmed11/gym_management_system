@@ -1019,3 +1019,12 @@ class ReportsView(QWidget):
         ])
         self.miss_export_pdf.setText(self.tr('📄 Export PDF'))
         self.miss_export_excel.setText(self.tr('📊 Export Excel'))
+        # Reload all reports to refresh display
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_all_reports()
+        # Ensure all tables are scrollable
+        for table in [self.reg_table, self.paid_table, self.att_table, self.fin_table, self.miss_table]:
+            table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+            table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)

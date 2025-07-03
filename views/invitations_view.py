@@ -993,7 +993,6 @@ class InvitationsView(QWidget):
             self.setLayoutDirection(Qt.RightToLeft)
         else:
             self.setLayoutDirection(Qt.LeftToRight)
-        # Update all labels, buttons, etc. here using self.tr(...)
         # Header
         for widget in self.findChildren(QLabel, 'pageTitle'):
             widget.setText(self.tr('🎯 Invitations Management'))
@@ -1002,17 +1001,14 @@ class InvitationsView(QWidget):
         # Search section
         self.client_input.setPlaceholderText(self.tr('Search by client code/name...'))
         self.friend_input.setPlaceholderText(self.tr('Search by friend name/phone...'))
-        # Status combo
         self.status_combo.clear()
         self.status_combo.addItems([
             self.tr('All Status'),
             self.tr('Tagged'),
             self.tr('Not Tagged')
         ])
-        # Filter and clear buttons
         self.filter_btn.setText(self.tr('🔍 Filter'))
         self.clear_btn.setText(self.tr('✖ Clear'))
-        # Status label
         for widget in self.findChildren(QLabel):
             if widget.text().replace(':','').strip() in ['Status', 'الحالة']:
                 widget.setText(self.tr('Status:'))
@@ -1043,3 +1039,10 @@ class InvitationsView(QWidget):
         self.tag_btn.setText(self.tr('🏷️ Mark as Tagged'))
         self.delete_btn.setText(self.tr('🗑️ Delete Invitation'))
         self.export_btn.setText(self.tr('📊 Export Data'))
+        # Reload invitations to refresh display
+        self.reload_data()
+
+    def reload_data(self):
+        self.load_invitations()
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
