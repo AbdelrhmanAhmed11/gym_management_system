@@ -496,50 +496,27 @@ class LoginWindow(QWidget):
         message_box.setText(message)
         message_box.setWindowFlags(Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint)
         
-        if message_type == 'error':
-            message_box.setIcon(QMessageBox.Critical)
+        if message_type == 'error' or message_type == 'success':
+            message_box.setIcon(QMessageBox.Critical if message_type == 'error' else QMessageBox.Information)
             message_box.setStyleSheet("""
                 QMessageBox {
-                    background-color: #2a2a2a;
+                    background-color: #2c2c2c;
                     color: #ffffff;
-                    font-family: 'Segoe UI', Arial, sans-serif;
-                    font-size: 16px;
+                }
+                QMessageBox QLabel {
+                    color: #ffffff;
                 }
                 QMessageBox QPushButton {
-                    background-color: #c1121f;
-                    color: white;
-                    border: none;
-                    padding: 15px 35px;
-                    border-radius: 12px;
-                    font-weight: bold;
-                    font-size: 16px;
-                    min-width: 100px;
-                }
-                QMessageBox QPushButton:hover {
                     background-color: #e63946;
-                }
-            """)
-        elif message_type == 'success':
-            message_box.setIcon(QMessageBox.Information)
-            message_box.setStyleSheet("""
-                QMessageBox {
-                    background-color: #2a2a2a;
-                    color: #ffffff;
-                    font-family: 'Segoe UI', Arial, sans-serif;
-                    font-size: 16px;
-                }
-                QMessageBox QPushButton {
-                    background-color: #38b000;
                     color: white;
                     border: none;
-                    padding: 15px 35px;
-                    border-radius: 12px;
-                    font-weight: bold;
-                    font-size: 16px;
-                    min-width: 100px;
+                    border-radius: 6px;
+                    padding: 8px 20px;
+                    font-weight: 600;
+                    min-width: 80px;
                 }
                 QMessageBox QPushButton:hover {
-                    background-color: #2d8f00;
+                    background-color: #ff6b6b;
                 }
             """)
         
