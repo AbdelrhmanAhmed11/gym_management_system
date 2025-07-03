@@ -723,6 +723,17 @@ class DashboardWindow(QWidget):
             return self.translator.translate(text)
         return text
 
+    def retranslate_ui(self):
+        # Example: update window title and any labels/buttons
+        self.setWindowTitle(self.tr('Dashboard'))
+        # Set layout direction based on language
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        # Update all labels, buttons, etc. here using self.tr(...)
+        # (You should add similar updates for all UI elements in this view)
+
 # Example usage and testing
 if __name__ == '__main__':
     class MockTranslator:

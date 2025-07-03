@@ -133,41 +133,32 @@ class FinanceView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 20px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 20px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_tabs_section(self):
@@ -999,7 +990,40 @@ class FinanceView(QWidget):
         return row[0] if row else None
 
     def tr(self, text):
-        # Placeholder for translation - implement with your translator
-        if hasattr(self.translator, 'tr'):
-            return self.translator.tr(text)
-        return text
+        """Translation method placeholder"""
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        self.setWindowTitle(self.tr('Finance Management'))
+        # Update header
+        if hasattr(self, 'header_frame'):
+            title_label = self.header_frame.findChild(QLabel, 'pageTitle')
+            if title_label:
+                title_label.setText(self.tr('💰 Finance Management'))
+            subtitle_label = self.header_frame.findChild(QLabel, 'pageSubtitle')
+            if subtitle_label:
+                subtitle_label.setText(self.tr('Track payments, expenses, and financial performance'))
+        # Update stats section
+        if hasattr(self, 'payments_stats_label'):
+            # Try to preserve the amount
+            amount = ''
+            if ':' in self.payments_stats_label.text():
+                amount = self.payments_stats_label.text().split(':', 1)[-1]
+            self.payments_stats_label.setText(self.tr('Total Payments:') + amount)
+        if hasattr(self, 'payments_search_btn'):
+            self.payments_search_btn.setText(self.tr('🔍 View Payments'))
+        if hasattr(self, 'add_payment_btn'):
+            self.add_payment_btn.setText(self.tr('➕ Add Payment'))
+        # Update payment records and actions labels if they exist
+        for widget in self.findChildren(QLabel, 'sectionTitle'):
+            if 'Payment Records' in widget.text() or 'سجلات المدفوعات' in widget.text():
+                widget.setText(self.tr('Payment Records'))
+        for widget in self.findChildren(QLabel, 'actionsTitle'):
+            if 'Payment Actions' in widget.text() or 'إجراءات المدفوعات' in widget.text():
+                widget.setText(self.tr('💳 Payment Actions'))
+
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        # Update all labels, buttons, etc. here using self.tr(...)

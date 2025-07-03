@@ -74,28 +74,6 @@ class LoginWindow(QWidget):
         self.form_section = QFrame()
         self.form_section.setObjectName("formSection")
 
-        # Language selector
-        self.language_frame = QFrame()
-        self.language_frame.setObjectName("languageFrame")
-        
-        self.lang_label = QLabel(self.tr('Language:'))
-        self.lang_label.setObjectName("langLabel")
-        
-        self.language_combo = QComboBox()
-        self.language_combo.setObjectName("languageCombo")
-        self.language_combo.addItems(['English', 'العربية'])
-        self.language_combo.currentIndexChanged.connect(self.switch_language)
-        self.language_combo.setFixedHeight(40)
-        self.language_combo.setMinimumWidth(130)
-
-        lang_layout = QHBoxLayout()
-        lang_layout.addStretch()
-        lang_layout.addWidget(self.lang_label)
-        lang_layout.addSpacing(10)
-        lang_layout.addWidget(self.language_combo)
-        lang_layout.setContentsMargins(0, 0, 0, 0)
-        self.language_frame.setLayout(lang_layout)
-
         # Form fields with responsive padding
         form_padding = max(50, int(card_width * 0.08))
         
@@ -133,8 +111,6 @@ class LoginWindow(QWidget):
         # Form layout with optimized spacing
         form_layout = QVBoxLayout()
         form_layout.addSpacing(25)
-        form_layout.addWidget(self.language_frame)
-        form_layout.addSpacing(30)
         
         form_layout.addWidget(self.username_label)
         form_layout.addSpacing(8)
@@ -251,12 +227,6 @@ class LoginWindow(QWidget):
                 border: none;
             }
             
-            /* Language Frame */
-            QFrame#languageFrame {
-                background-color: transparent;
-                border: none;
-            }
-            
             /* Field Labels */
             QLabel#fieldLabel {
                 color: #ffffff;
@@ -266,14 +236,6 @@ class LoginWindow(QWidget):
                 background: transparent;
                 margin: 0px;
                 padding: 0px;
-            }
-            
-            QLabel#langLabel {
-                color: #cccccc;
-                font-size: 15px;
-                font-weight: 500;
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background: transparent;
             }
             
             /* Input Fields */
@@ -352,47 +314,6 @@ class LoginWindow(QWidget):
                 outline: none;
             }
             
-            /* Language Combo Box */
-            QComboBox#languageCombo {
-                background-color: #3a3a3a;
-                border: 2px solid #4a4a4a;
-                border-radius: 10px;
-                padding: 0px 15px;
-                font-size: 14px;
-                color: #cccccc;
-                font-family: 'Segoe UI', Arial, sans-serif;
-            }
-            
-            QComboBox#languageCombo:hover {
-                border-color: #e63946;
-                color: #ffffff;
-                background-color: #424242;
-            }
-            
-            QComboBox#languageCombo::drop-down {
-                border: none;
-                width: 30px;
-            }
-            
-            QComboBox#languageCombo::down-arrow {
-                image: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 5px solid #cccccc;
-                margin-right: 10px;
-            }
-            
-            QComboBox#languageCombo QAbstractItemView {
-                background-color: #3a3a3a;
-                border: 2px solid #e63946;
-                border-radius: 8px;
-                selection-background-color: #e63946;
-                selection-color: white;
-                color: #ffffff;
-                font-size: 14px;
-                padding: 6px;
-            }
-            
             /* Login Button */
             QPushButton#loginButton {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -435,11 +356,6 @@ class LoginWindow(QWidget):
         self.button_animation.setDuration(200)
         self.button_animation.setEasingCurve(QEasingCurve.OutCubic)
 
-    def switch_language(self, index):
-        language = 'en' if index == 0 else 'ar'
-        self.translator.set_language(language)
-        self.retranslate_ui()
-
     def retranslate_ui(self):
         self.setWindowTitle(self.tr('Gym Management System - Login'))
         self.app_title.setText(self.tr('GYM MANAGEMENT'))
@@ -450,7 +366,6 @@ class LoginWindow(QWidget):
         self.password_field.setPlaceholderText(self.tr('Enter your password'))
         self.role_label.setText(self.tr('Role'))
         self.login_button.setText(self.tr('LOGIN'))
-        self.lang_label.setText(self.tr('Language:'))
         
         # Update role combo items
         current_role_index = self.role_combo.currentIndex()
@@ -458,10 +373,38 @@ class LoginWindow(QWidget):
         self.role_combo.addItems([self.tr('Admin'), self.tr('Receptionist')])
         self.role_combo.setCurrentIndex(current_role_index)
 
+        # Set layout direction and item alignment for role label and combo box
+        if self.translator.get_language() == 'ar':
+            self.role_label.setLayoutDirection(Qt.RightToLeft)
+            self.role_combo.setLayoutDirection(Qt.RightToLeft)
+            for i in range(self.role_combo.count()):
+                self.role_combo.setItemData(i, Qt.AlignRight, Qt.TextAlignmentRole)
+            # Set line edit alignment and cursor position for RTL
+            self.role_combo.setEditable(True)
+            self.role_combo.lineEdit().setAlignment(Qt.AlignRight)
+            self.role_combo.lineEdit().setCursorPosition(len(self.role_combo.currentText()))
+            self.role_combo.setEditable(False)
+        else:
+            self.role_label.setLayoutDirection(Qt.LeftToRight)
+            self.role_combo.setLayoutDirection(Qt.LeftToRight)
+            for i in range(self.role_combo.count()):
+                self.role_combo.setItemData(i, Qt.AlignLeft, Qt.TextAlignmentRole)
+            # Set line edit alignment and cursor position for LTR
+            self.role_combo.setEditable(True)
+            self.role_combo.lineEdit().setAlignment(Qt.AlignLeft)
+            self.role_combo.lineEdit().setCursorPosition(0)
+            self.role_combo.setEditable(False)
+
     def handle_login(self):
         username = self.username_field.text().strip()
         password = self.password_field.text().strip()
-        role = self.role_combo.currentText().lower()
+        # Map role to English value for login
+        role_map = {
+            self.tr('Admin').lower(): 'admin',
+            self.tr('Receptionist').lower(): 'receptionist',
+        }
+        selected_role = self.role_combo.currentText().lower()
+        role = role_map.get(selected_role, selected_role)
 
         # Validate input
         if not username or not password:

@@ -192,41 +192,32 @@ class SessionsView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_table_section(self):
@@ -1064,4 +1055,16 @@ class SessionsView(QWidget):
 
     def tr(self, text):
         """Translation method placeholder"""
-        return text
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        print('DEBUG: retranslate_ui called for SessionsView')
+        print('DEBUG: add_btn text before:', self.add_btn.text())
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        self.add_btn.setText(self.tr('➕ Add New Session'))
+        print('DEBUG: add_btn text after:', self.add_btn.text())
+        self.edit_btn.setText(self.tr('✏️ Edit Session'))
+        self.delete_btn.setText(self.tr('🗑️ Delete Session'))

@@ -140,7 +140,7 @@ class UserManagementView(QWidget):
         # Get user statistics
         stats = self.get_user_stats()
         
-        # Create stat cards
+        # Create stat cards - MATCHING REPORTS PAGE DESIGN
         stat_cards = [
             ('👥', self.tr('Total Users'), str(stats['total']), '#e63946'),
             ('🛡️', self.tr('Administrators'), str(stats['admins']), '#dc3545'),
@@ -157,41 +157,32 @@ class UserManagementView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_table_section(self):
@@ -203,7 +194,7 @@ class UserManagementView(QWidget):
         table_layout.setSpacing(20)
         
         # Table title
-        table_title = QLabel(self.tr('User Directory'))
+        table_title = QLabel(self.tr('👥 User Directory'))
         table_title.setObjectName("sectionTitle")
         
         # Create table
@@ -216,7 +207,7 @@ class UserManagementView(QWidget):
             self.tr('Full Name')
         ])
         
-        # Configure table
+        # Configure table for responsiveness
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Stretch)
         header.setMinimumHeight(45)
@@ -252,7 +243,7 @@ class UserManagementView(QWidget):
         actions_title.setObjectName("actionsTitle")
         actions_layout.addWidget(actions_title)
         
-        # Buttons layout
+        # Buttons layout - responsive
         buttons_layout = QHBoxLayout()
         buttons_layout.setSpacing(15)
         
@@ -260,28 +251,28 @@ class UserManagementView(QWidget):
         self.add_btn = QPushButton(self.tr('➕ Add User'))
         self.add_btn.setObjectName("addButton")
         self.add_btn.setFixedHeight(45)
-        self.add_btn.setFixedWidth(140)
+        self.add_btn.setMinimumWidth(140)
         self.add_btn.clicked.connect(self.open_add_user)
         
         # Remove button
         self.remove_btn = QPushButton(self.tr('🗑️ Remove User'))
         self.remove_btn.setObjectName("deleteButton")
         self.remove_btn.setFixedHeight(45)
-        self.remove_btn.setFixedWidth(150)
+        self.remove_btn.setMinimumWidth(150)
         self.remove_btn.clicked.connect(self.handle_remove_user)
         
         # Change password button
         self.change_pass_btn = QPushButton(self.tr('🔑 Change Password'))
         self.change_pass_btn.setObjectName("editButton")
         self.change_pass_btn.setFixedHeight(45)
-        self.change_pass_btn.setFixedWidth(170)
+        self.change_pass_btn.setMinimumWidth(170)
         self.change_pass_btn.clicked.connect(self.handle_change_password)
         
         # Refresh button
         self.refresh_btn = QPushButton(self.tr('🔄 Refresh'))
         self.refresh_btn.setObjectName("refreshButton")
         self.refresh_btn.setFixedHeight(45)
-        self.refresh_btn.setFixedWidth(120)
+        self.refresh_btn.setMinimumWidth(120)
         self.refresh_btn.clicked.connect(self.load_users)
         
         buttons_layout.addWidget(self.add_btn)
@@ -484,6 +475,7 @@ class UserManagementView(QWidget):
                 font-size: 13px;
                 selection-background-color: #e63946;
                 selection-color: white;
+                border-radius: 8px;
             }
             
             QTableWidget#usersTable::item {
@@ -888,4 +880,45 @@ class UserManagementView(QWidget):
 
     def tr(self, text):
         """Translation method placeholder"""
-        return text
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        
+        # Header
+        for widget in self.findChildren(QLabel, 'pageTitle'):
+            widget.setText(self.tr('👥 User Management'))
+        for widget in self.findChildren(QLabel, 'pageSubtitle'):
+            widget.setText(self.tr('Manage system users, roles, and access permissions'))
+        
+        # Search section
+        self.search_input.setPlaceholderText(self.tr('Search by username or full name...'))
+        self.role_filter.setItemText(0, self.tr('All Roles'))
+        self.role_filter.setItemText(1, self.tr('Admin'))
+        self.role_filter.setItemText(2, self.tr('Receptionist'))
+        self.search_btn.setText(self.tr('🔍 Search'))
+        self.clear_btn.setText(self.tr('✖ Clear'))
+        
+        # Table section
+        for widget in self.findChildren(QLabel, 'sectionTitle'):
+            widget.setText(self.tr('👥 User Directory'))
+        self.table.setHorizontalHeaderLabels([
+            self.tr('ID'),
+            self.tr('Username'),
+            self.tr('Role'),
+            self.tr('Full Name')
+        ])
+        
+        # Actions section
+        for widget in self.findChildren(QLabel, 'actionsTitle'):
+            widget.setText(self.tr('⚡ User Actions'))
+        self.add_btn.setText(self.tr('➕ Add User'))
+        self.remove_btn.setText(self.tr('🗑️ Remove User'))
+        self.change_pass_btn.setText(self.tr('🔑 Change Password'))
+        self.refresh_btn.setText(self.tr('🔄 Refresh'))
+        
+        # Reload users to refresh display
+        self.load_users()

@@ -522,7 +522,23 @@ class AttendanceView(QWidget):
         return row[0] if row else None
 
     def tr(self, text):
-        # Placeholder for translation - implement with your translator
-        if hasattr(self.translator, 'tr'):
-            return self.translator.tr(text)
-        return text
+        """Translation method placeholder"""
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        # Update all labels, buttons, etc. here using self.tr(...)
+        # Update stats label with current value and translation
+        import re
+        stats_text = self.stats_label.text()
+        match = re.search(r'(.*?:)\s*(\d+)$', stats_text)
+        if match:
+            label_part = match.group(1)
+            number_part = match.group(2)
+            translated_label = self.tr(label_part)
+            self.stats_label.setText(f'{translated_label} {number_part}')
+        else:
+            self.stats_label.setText(self.tr(stats_text))

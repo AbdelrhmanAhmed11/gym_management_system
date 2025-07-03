@@ -95,41 +95,32 @@ class ReportsView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_tabs_section(self):
@@ -965,4 +956,66 @@ class ReportsView(QWidget):
 
     def tr(self, text):
         """Translation method placeholder"""
-        return text
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        # Header
+        for widget in self.findChildren(QLabel, 'pageTitle'):
+            widget.setText(self.tr('📊 Reports Management'))
+        for widget in self.findChildren(QLabel, 'pageSubtitle'):
+            widget.setText(self.tr('Generate comprehensive reports, track analytics, and export business insights'))
+        # Stats section
+        stats = self.get_report_stats()
+        stat_labels = [self.tr('Registered Today'), self.tr('Payments Today'), self.tr('Attendance Today'), self.tr('Total Reports')]
+        for i, card in enumerate(self.findChildren(QFrame, 'statCard')):
+            for label in card.findChildren(QLabel):
+                if label.objectName() == 'statIcon':
+                    continue
+                if i < len(stat_labels):
+                    label.setText(f"{stat_labels[i]} ({stats[list(stats.keys())[i]] if i < 3 else stats['total_reports']})")
+        # Tabs section
+        for widget in self.findChildren(QLabel, 'sectionTitle'):
+            widget.setText(self.tr('📋 Report Categories'))
+        tab_titles = [
+            self.tr('📝 Registered Today'),
+            self.tr('💳 Paid Today'),
+            self.tr('🏃 Attended Today'),
+            self.tr('💰 Monthly Financials'),
+            self.tr('⚠️ Missing Payments')
+        ]
+        for i in range(self.tabs.count()):
+            self.tabs.setTabText(i, tab_titles[i])
+        # Registered tab
+        self.reg_table.setHorizontalHeaderLabels([
+            self.tr('Code'), self.tr('Name'), self.tr('Phone'), self.tr('Subscription'), self.tr('Start Date')
+        ])
+        self.reg_export_pdf.setText(self.tr('📄 Export PDF'))
+        self.reg_export_excel.setText(self.tr('📊 Export Excel'))
+        # Paid tab
+        self.paid_table.setHorizontalHeaderLabels([
+            self.tr('Code'), self.tr('Name'), self.tr('Amount'), self.tr('Description')
+        ])
+        self.paid_export_pdf.setText(self.tr('📄 Export PDF'))
+        self.paid_export_excel.setText(self.tr('📊 Export Excel'))
+        # Attended tab
+        self.att_table.setHorizontalHeaderLabels([
+            self.tr('Code'), self.tr('Name'), self.tr('Check-in Time')
+        ])
+        self.att_export_pdf.setText(self.tr('📄 Export PDF'))
+        self.att_export_excel.setText(self.tr('📊 Export Excel'))
+        # Financials tab
+        self.fin_table.setHorizontalHeaderLabels([
+            self.tr('Date'), self.tr('Category'), self.tr('Amount'), self.tr('Description'), self.tr('User')
+        ])
+        self.fin_export_pdf.setText(self.tr('📄 Export PDF'))
+        self.fin_export_excel.setText(self.tr('📊 Export Excel'))
+        # Missing payments tab
+        self.miss_table.setHorizontalHeaderLabels([
+            self.tr('Code'), self.tr('Name'), self.tr('Phone'), self.tr('Amount Remaining'), self.tr('End Date')
+        ])
+        self.miss_export_pdf.setText(self.tr('📄 Export PDF'))
+        self.miss_export_excel.setText(self.tr('📊 Export Excel'))

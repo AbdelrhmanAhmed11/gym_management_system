@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, 
-                             QLabel, QTableWidget, QTableWidgetItem, QMessageBox, QSizePolicy,
-                             QFrame, QHeaderView, QComboBox, QGraphicsDropShadowEffect,
-                             QSpacerItem, QAbstractItemView)
+                                QLabel, QTableWidget, QTableWidgetItem, QMessageBox, QSizePolicy,
+                                QFrame, QHeaderView, QComboBox, QGraphicsDropShadowEffect,
+                                QSpacerItem, QAbstractItemView)
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QColor, QFont, QPalette
 from controllers.clients_controller import ClientsController
@@ -17,6 +17,11 @@ class ClientsView(QWidget):
         self.init_ui()
         self.apply_styles()
         self.load_clients()
+        # Set layout direction based on language
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
 
     def init_ui(self):
         self.setWindowTitle(self.tr('Clients Management'))
@@ -161,41 +166,32 @@ class ClientsView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_table_section(self):
@@ -785,13 +781,12 @@ class ClientsView(QWidget):
             try:
                 end_date = datetime.strptime(row_data[5], '%Y-%m-%d').date()
                 if end_date < today:
-                    status = "❌ Expired"
+                    status = '❌ Expired'
                 elif end_date <= week_from_now:
-                    status = "⏰ Ending Soon"
+                    status = '⏰ Ending Soon'
                 else:
-                    status = "✅ Active"
-                
-                status_item = QTableWidgetItem(status)
+                    status = '✅ Active'
+                status_item = QTableWidgetItem(self.tr(status))
                 status_item.setFlags(status_item.flags() & ~Qt.ItemIsEditable)
                 status_item.setTextAlignment(Qt.AlignCenter)
                 self.table.setItem(row, 6, status_item)
@@ -799,7 +794,7 @@ class ClientsView(QWidget):
                 self.table.setRowHeight(row, 50)
                 
             except:
-                status_item = QTableWidgetItem("❓ Unknown")
+                status_item = QTableWidgetItem(self.tr("Unknown"))
                 status_item.setFlags(status_item.flags() & ~Qt.ItemIsEditable)
                 status_item.setTextAlignment(Qt.AlignCenter)
                 self.table.setItem(row, 6, status_item)
@@ -829,18 +824,18 @@ class ClientsView(QWidget):
             try:
                 self.controller.add(data)
                 QMessageBox.information(self, self.tr('Success'), 
-                                      self.tr('✅ Client added successfully!'))
+                                    self.tr('✅ Client added successfully!'))
                 self.load_clients()
             except Exception as e:
                 QMessageBox.critical(self, self.tr('Error'), 
-                                   self.tr(f'❌ Error adding client: {str(e)}'))
+                                self.tr(f'❌ Error adding client: {str(e)}'))
 
     def open_edit_dialog(self):
         """Open dialog to edit selected client"""
         row = self.table.currentRow()
         if row < 0:
             QMessageBox.information(self, self.tr('No Selection'), 
-                                  self.tr('Please select a client to edit.'))
+                                self.tr('Please select a client to edit.'))
             return
         
         code = self.table.item(row, 0).text()
@@ -870,18 +865,18 @@ class ClientsView(QWidget):
             try:
                 self.controller.update(code, data)
                 QMessageBox.information(self, self.tr('Success'), 
-                                      self.tr('✅ Client updated successfully!'))
+                                    self.tr('✅ Client updated successfully!'))
                 self.load_clients()
             except Exception as e:
                 QMessageBox.critical(self, self.tr('Error'), 
-                                   self.tr(f'❌ Error updating client: {str(e)}'))
+                                self.tr(f'❌ Error updating client: {str(e)}'))
 
     def handle_delete(self):
         """Handle client deletion"""
         row = self.table.currentRow()
         if row < 0:
             QMessageBox.information(self, self.tr('No Selection'), 
-                                  self.tr('Please select a client to delete.'))
+                                self.tr('Please select a client to delete.'))
             return
         
         code = self.table.item(row, 0).text()
@@ -899,11 +894,11 @@ class ClientsView(QWidget):
             try:
                 self.controller.delete(code)
                 QMessageBox.information(self, self.tr('Success'), 
-                                      self.tr('✅ Client deleted successfully!'))
+                                    self.tr('✅ Client deleted successfully!'))
                 self.load_clients()
             except Exception as e:
                 QMessageBox.critical(self, self.tr('Error'), 
-                                   self.tr(f'❌ Error deleting client: {str(e)}'))
+                                self.tr(f'❌ Error deleting client: {str(e)}'))
 
     def export_data(self):
         """Export client data"""
@@ -945,11 +940,63 @@ class ClientsView(QWidget):
                         writer.writerow(row)
                 
                 QMessageBox.information(self, self.tr('Export Complete'), 
-                                      self.tr(f'✅ Data exported successfully to:\n{filename}'))
+                                    self.tr(f'✅ Data exported successfully to:\n{filename}'))
         except Exception as e:
             QMessageBox.critical(self, self.tr('Export Error'), 
-                               self.tr(f'❌ Error exporting data: {str(e)}'))
+                            self.tr(f'❌ Error exporting data: {str(e)}'))
 
     def tr(self, text):
         """Translation method placeholder"""
-        return text
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        self.setWindowTitle(self.tr('Clients Management'))
+        # Update header
+        if hasattr(self, 'header_frame'):
+            title_label = self.header_frame.findChild(QLabel, 'pageTitle')
+            if title_label:
+                title_label.setText(self.tr('👥 Clients Management'))
+            subtitle_label = self.header_frame.findChild(QLabel, 'pageSubtitle')
+            if subtitle_label:
+                subtitle_label.setText(self.tr('Manage gym members, subscriptions, and client information'))
+        # Update search section
+        if hasattr(self, 'search_input'):
+            self.search_input.setPlaceholderText(self.tr('Search by name, code, or phone number...'))
+        if hasattr(self, 'filter_combo'):
+            self.filter_combo.clear()
+            self.filter_combo.addItems([
+                self.tr('All Clients'),
+                self.tr('Active'),
+                self.tr('Expired'),
+                self.tr('Ending Soon')
+            ])
+        if hasattr(self, 'search_btn'):
+            self.search_btn.setText(self.tr('🔍 Search'))
+        if hasattr(self, 'clear_btn'):
+            self.clear_btn.setText(self.tr('✖ Clear'))
+        # Update stats section
+        if hasattr(self, 'stats_frame'):
+            for card in self.stats_frame.findChildren(QFrame, 'statCard'):
+                label_widget = card.findChild(QLabel, 'statLabel')
+                if label_widget:
+                    label_widget.setText(self.tr(label_widget.text()))
+        # Update table headers
+        if hasattr(self, 'table'):
+            self.table.setHorizontalHeaderLabels([
+                self.tr('Code'),
+                self.tr('Name'),
+                self.tr('Phone'),
+                self.tr('Subscription'),
+                self.tr('Start Date'),
+                self.tr('End Date'),
+                self.tr('Status')
+            ])
+        # Update action buttons
+        if hasattr(self, 'add_btn'):
+            self.add_btn.setText(self.tr('Add New Client'))
+        if hasattr(self, 'edit_btn'):
+            self.edit_btn.setText(self.tr('Edit Client'))
+        if hasattr(self, 'delete_btn'):
+            self.delete_btn.setText(self.tr('Delete Client'))
+        if hasattr(self, 'export_btn'):
+            self.export_btn.setText(self.tr('Export Data'))

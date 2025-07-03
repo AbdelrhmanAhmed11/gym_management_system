@@ -183,41 +183,32 @@ class LoansView(QWidget):
         return stats_frame
 
     def create_stat_card(self, icon, label, value, color):
+        """Create stat card with icon and colored title+count centered vertically and horizontally."""
         card = QFrame()
         card.setObjectName("statCard")
         card.setMinimumHeight(80)
         card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(15, 10, 15, 10)
         layout.setSpacing(5)
-        
-        # Top row with icon and value
-        top_layout = QHBoxLayout()
-        top_layout.setSpacing(10)
-        
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Icon centered
         icon_label = QLabel(icon)
         icon_label.setObjectName("statIcon")
         icon_label.setAlignment(Qt.AlignCenter)
-        
-        value_label = QLabel(value)
-        value_label.setObjectName("statValue")
-        value_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
-        
-        top_layout.addWidget(icon_label)
-        top_layout.addStretch()
-        top_layout.addWidget(value_label)
-        
-        # Label
-        label_widget = QLabel(label)
-        label_widget.setObjectName("statLabel")
-        label_widget.setAlignment(Qt.AlignCenter)
-        
-        layout.addLayout(top_layout)
-        layout.addWidget(label_widget)
-        
+
+        # Colored title + count centered
+        title_count_label = QLabel(f"{label} ({value})")
+        title_count_label.setObjectName("statValue")
+        title_count_label.setStyleSheet(f"color: {color}; font-size: 24px; font-weight: bold;")
+        title_count_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(icon_label, alignment=Qt.AlignCenter)
+        layout.addWidget(title_count_label, alignment=Qt.AlignCenter)
+
         card.setLayout(layout)
-        
         return card
 
     def create_table_section(self):
@@ -1032,4 +1023,75 @@ class LoansView(QWidget):
 
     def tr(self, text):
         """Translation method placeholder"""
-        return text
+        return self.translator.translate(text)
+
+    def retranslate_ui(self):
+        if self.translator.get_language() == 'ar':
+            self.setLayoutDirection(Qt.RightToLeft)
+        else:
+            self.setLayoutDirection(Qt.LeftToRight)
+        # Update all labels, buttons, etc. here using self.tr(...)
+        # Header
+        for widget in self.findChildren(QLabel, 'pageTitle'):
+            widget.setText(self.tr('💰 Loans Management'))
+        for widget in self.findChildren(QLabel, 'pageSubtitle'):
+            widget.setText(self.tr('Track client loans, manage balances, and monitor financial transactions'))
+        # Search section
+        self.client_input.setPlaceholderText(self.tr('Search by client code/name...'))
+        self.amount_input.setPlaceholderText(self.tr('Search by amount...'))
+        # Amount combo
+        self.amount_combo.clear()
+        self.amount_combo.addItems([
+            self.tr('All Amounts'),
+            self.tr('< 100'),
+            self.tr('100 - 500'),
+            self.tr('> 500')
+        ])
+        # Filter and clear buttons
+        self.filter_btn.setText(self.tr('🔍 Filter'))
+        self.clear_btn.setText(self.tr('✖ Clear'))
+        # Amount label
+        for widget in self.findChildren(QLabel):
+            if widget.text().replace(':','').strip() in ['Amount', 'المبلغ']:
+                widget.setText(self.tr('Amount:'))
+        # Stats section
+        stats = self.get_loan_stats()
+        stat_labels = [self.tr('Total Loans'), self.tr('Total Amount'), self.tr('Average Loan'), self.tr('This Month')]
+        for i, card in enumerate(self.findChildren(QFrame, 'statCard')):
+            for label in card.findChildren(QLabel):
+                if label.objectName() == 'statIcon':
+                    continue
+                if i < len(stat_labels):
+                    label.setText(f"{stat_labels[i]} ({stats[list(stats.keys())[i]] if i < 3 else stats['this_month']})")
+        # Table section
+        for widget in self.findChildren(QLabel, 'sectionTitle'):
+            widget.setText(self.tr('Loan Records'))
+        self.table.setHorizontalHeaderLabels([
+            self.tr('Client Code'),
+            self.tr('Client Name'),
+            self.tr('Amount'),
+            self.tr('Description'),
+            self.tr('Date'),
+            self.tr('Status')
+        ])
+        # Balance label
+        balance_text = self.balance_label.text()
+        if 'Running Balance' in balance_text or 'الرصيد الجاري' in balance_text:
+            # Try to preserve the number
+            import re
+            match = re.search(r'([\d\.,]+)', balance_text)
+            if match:
+                value = match.group(1)
+                if value == '0.00':
+                    self.balance_label.setText(self.tr('Running Balance: $0.00'))
+                else:
+                    self.balance_label.setText(self.tr(f'Running Balance: ${value}'))
+            else:
+                self.balance_label.setText(self.tr('Running Balance: $0.00'))
+        # Actions section
+        for widget in self.findChildren(QLabel, 'actionsTitle'):
+            widget.setText(self.tr('⚡ Quick Actions'))
+        self.add_btn.setText(self.tr('➕ Add New Loan'))
+        self.payment_btn.setText(self.tr('💳 Record Payment'))
+        self.delete_btn.setText(self.tr('🗑️ Delete Loan'))
+        self.export_btn.setText(self.tr('📊 Export Data'))
